@@ -1,0 +1,5 @@
+.todo-checked {
+  text-decoration: line-through;
+
+  transition: text-decoration 2s;
+}

@@ -28,7 +28,7 @@ app.post('/todos', async (req, res) => {
 
 app.get('/todos', async (req, res) => {
   try {
-    const todos = await pool.query('SELECT * FROM todos');
+    const todos = await pool.query('SELECT * FROM todos ORDER BY todo_id');
     res.status(201).json(todos.rows);
   } catch (error) {}
 });
@@ -51,11 +51,11 @@ app.get('/todos/:id', async (req, res) => {
 app.put('/todos/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { description } = req.body;
+    const { description, finished } = req.body;
 
     const updatedTodo = await pool.query(
-      'UPDATE todos SET description = $1 WHERE todo_id = $2 RETURNING *',
-      [description, id]
+      'UPDATE todos SET description = $1, finished = $2 WHERE todo_id = $3 RETURNING *',
+      [description, finished, id]
     );
     res.status(200).json(updatedTodo.rows);
   } catch (error) {
